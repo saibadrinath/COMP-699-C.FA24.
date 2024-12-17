@@ -1,0 +1,73 @@
+DROP DATABASE IF EXISTS nutrition_planning; 
+
+-- Create database if not exists
+CREATE DATABASE IF NOT EXISTS nutrition_planning;
+
+USE nutrition_planning;
+
+-- Table for storing users
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('athlete', 'coach') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for storing nutrition plans
+CREATE TABLE IF NOT EXISTS nutrition_plans (
+    plan_id INT AUTO_INCREMENT PRIMARY KEY,
+    athlete_id INT,
+    meal VARCHAR(100),
+    calories INT,
+    proteins INT,
+    carbs INT,
+    fats INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for storing fitness tracking data
+CREATE TABLE IF NOT EXISTS fitness_tracking (
+    tracking_id INT AUTO_INCREMENT PRIMARY KEY,
+    athlete_id INT,
+    exercise VARCHAR(100),
+    duration INT,
+    intensity VARCHAR(50),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for storing suggestions from coaches
+CREATE TABLE IF NOT EXISTS nutrition_suggestions (
+    suggestion_id INT AUTO_INCREMENT PRIMARY KEY,
+    athlete_id INT,
+    coach_id INT,
+    suggestion TEXT,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Sample data insertion for athletes and coaches (use for testing)
+INSERT INTO users (email, password, role)
+VALUES
+('athlete1@example.com', 'hashedpassword123', 'athlete'),
+('athlete2@example.com', 'hashedpassword456', 'athlete'),
+('coach1@example.com', 'hashedpassword789', 'coach'),
+('coach2@example.com', 'hashedpassword101', 'coach');
+
+-- Sample nutrition plan data (for testing)
+INSERT INTO nutrition_plans (athlete_id, meal, calories, proteins, carbs, fats)
+VALUES
+(1, 'Breakfast', 300, 25, 40, 10),
+(2, 'Lunch', 500, 40, 60, 20);
+
+-- Sample fitness tracking data (for testing)
+INSERT INTO fitness_tracking (athlete_id, exercise, duration, intensity)
+VALUES
+(1, 'Running', 30, 'Moderate'),
+(2, 'Cycling', 45, 'High');
+
+-- Sample coach suggestions data (for testing)
+INSERT INTO nutrition_suggestions (athlete_id, coach_id, suggestion)
+VALUES
+(1, 1, 'Increase protein intake in breakfast'),
+(2, 2, 'Focus on cardio for weight loss');
